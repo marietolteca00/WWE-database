@@ -1,0 +1,44 @@
+---
+title: "data_wrangle"
+format: html
+---
+# Every Superstar
+```{r}
+library(dplyr)
+library(tidyr)
+library(stringr)
+
+opponents <- match_rating %>%
+  select(Index, Opponent.1, Opponent.2) %>%
+  pivot_longer(
+    cols = c(Opponent.1, Opponent.2),
+    names_to = "Side",
+    values_to = "Team"
+  ) %>%
+  mutate(Team = str_replace_all(Team, ",\\s*$", "")) %>%  # remove trailing commas
+  separate_rows(Team, sep = "&|,") %>%                    # split on & and ,
+  mutate(SuperstarName = str_trim(Team)) %>%              # clean whitespace
+  filter(SuperstarName != "") %>%                         # drop empty rows
+  select(MatchIndex = Index, SuperstarName)
+
+opponents
+```
+
+# Table for teams
+```{r}
+opponents2 <- match_rating %>%
+  select(Index, Opponent.1, Opponent.2) %>%
+  pivot_longer(
+    cols = c(Opponent.1, Opponent.2),
+    names_to = "Side",
+    values_to = "Team"
+  ) %>%
+  mutate(Team = str_trim(str_replace_all(Team, ",\\s*$", ""))) %>%
+  filter(str_detect(Team, "&")) %>%        # keep only entries with & (tag teams)
+  select(MatchIndex = Index, Team)
+
+opponents2
+
+```
+
+
