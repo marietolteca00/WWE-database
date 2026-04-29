@@ -29,9 +29,9 @@ superstars <- match_rating %>%
   ) %>%
   mutate(Team = str_replace_all(Team, ",\\s*$", "")) %>%  # remove trailing commas
   separate_rows(Team, sep = "&|,") %>%                    # split on & and ,
-  mutate(SuperstarName = str_trim(Team)) %>%              # clean whitespace
-  filter(SuperstarName != "") %>%                         # drop empty rows
-  select(MatchIndex = Index, SuperstarName)
+  mutate(superstar_name = str_trim(Team)) %>%              # clean whitespace
+  filter(superstar_name != "") %>%                         # drop empty rows
+  select(MatchIndex = Index, superstar_name)
 
 superstars
 ```
