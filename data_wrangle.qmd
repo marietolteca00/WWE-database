@@ -53,3 +53,22 @@ teams
 ```
 
 
+# Saves to a folder named 'output' in your current working directory
+```{r}
+
+# Superstar
+write.csv(superstars, file = "output/superstars.csv", row.names = FALSE)
+
+# Teams
+write.csv(teams, file = "output/teams.csv", row.names = FALSE)
+
+# Add Match Rating csv into output
+write.csv(match_rating, file = "output/match_rating.csv", row.names = FALSE)
+
+# Add Events csv into output
+write.csv(events, file = "output/events.csv", row.names = FALSE)
+
+
+
+```
+
