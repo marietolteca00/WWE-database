@@ -2,13 +2,25 @@
 title: "data_wrangle"
 format: html
 ---
-# Every Superstar
-```{r}
+
+# Libraries
+```{r, message=FALSE}
+library(tidyverse)
 library(dplyr)
 library(tidyr)
 library(stringr)
+```
 
-opponents <- match_rating %>%
+# Load in CSV From Data Exploration
+```{r, message=FALSE}
+events <- read_csv(here::here('data','wwe_events.csv'))
+match_rating <- read_csv(here::here("data","wwe_match_rating.csv"))
+
+```
+
+# Every Superstar
+```{r}
+superstars <- match_rating %>%
   select(Index, Opponent.1, Opponent.2) %>%
   pivot_longer(
     cols = c(Opponent.1, Opponent.2),
@@ -21,12 +33,12 @@ opponents <- match_rating %>%
   filter(SuperstarName != "") %>%                         # drop empty rows
   select(MatchIndex = Index, SuperstarName)
 
-opponents
+superstars
 ```
 
 # Table for teams
 ```{r}
-opponents2 <- match_rating %>%
+teams <- match_rating %>%
   select(Index, Opponent.1, Opponent.2) %>%
   pivot_longer(
     cols = c(Opponent.1, Opponent.2),
@@ -37,8 +49,7 @@ opponents2 <- match_rating %>%
   filter(str_detect(Team, "&")) %>%        # keep only entries with & (tag teams)
   select(MatchIndex = Index, Team)
 
-opponents2
-
+teams
 ```
 
 
