@@ -26,6 +26,22 @@ FROM (
     JOIN match_rating m ON e.Date = m.Date AND e.Promotion = m.Promotion
     GROUP BY e.EventType, e.Event
 )
+--- UPDATED
+SELECT EventType, Event, TotalVotes
+FROM (
+    SELECT 
+        e.EventType,
+        e.Event,
+        SUM(m.CageMatchRatingVotes) AS TotalVotes,
+        ROW_NUMBER() OVER (PARTITION BY e.EventType ORDER BY SUM(m.CageMatchRatingVotes) DESC) AS rn
+    FROM events e
+    JOIN match_rating m ON e.Date = m.Date AND e.Promotion = m.Promotion
+    GROUP BY e.EventType, e.Event
+) sub
+WHERE rn <= 5                          -- top 5 per EventType only
+  AND TotalVotes IS NOT NULL
+ORDER BY EventType, TotalVotes DESC;
+
 -- Keep one row
 WHERE rn = 1
 ORDER BY TotalVotes DESC;
@@ -141,3 +157,13 @@ SELECT s.superstar_name, YEAR(m.Date) AS Year, SUM(m.CageMatchRatingVotes) AS To
     AND s.superstar_name ILIKE '%cena%'
     GROUP BY s.superstar_name, Year
     ORDER BY Year DESC;
+
+-- Viewship Trend from 2015-2020
+SELECT 
+    YEAR(m.Date) AS Year,
+    e.EventType,
+    SUM(m.CageMatchRatingVotes) AS TotalVotes
+FROM match_rating m
+JOIN events e ON e.Date = m.Date AND e.Promotion = m.Promotion
+GROUP BY Year, e.EventType
+ORDER BY Year ASC, TotalVotes DESC;
