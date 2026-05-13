@@ -1,5 +1,5 @@
 # WWE Events & Match Ratings Database (2015–2025)
-### World Westling Entertainment (WWE) gathering datasets to make a database - Final Project for EDS 213
+### World Wrestling Entertainment (WWE) gathering datasets to make a database - Final Project for EDS 213
 
 A structured SQL database built from real WWE event and match rating data sourced from [Cagematch.net](https://www.cagematch.net) and the Wrestling Observer Newsletter (WON). This project demonstrates end-to-end data engineering and analytics skills — from schema design and data ingestion to SQL querying and Python visualization.
 
@@ -44,7 +44,7 @@ The dataset covers **10 years of WWE programming** (2015–2025), including tele
 | `wwe_match_rating.csv` | 8,101 | Match-level data with fan and critic ratings |
 
 **Rating Sources:**
-- **CageMatch Rating** — crowdsourced fan ratings from cagematch.net (6,235 matches rated)
+- **CageMatch Rating** — crowdsourced fan ratings from **cagematch.net** (6,235 matches rated)
 - **WON Star Rating** — critic ratings from Dave Meltzer's Wrestling Observer Newsletter (2,171 matches rated)
 
 **Event Types:**
@@ -137,45 +137,57 @@ tag_teams <- match_rating %>%
 
 ## Analysis Questions
 
-### Q1 — Do PLE/PPV matches get rated higher than Televised matches?
+### Q1 — How has fan engagement varied across WWE event types from 2015 to 2025?
+
+📓 [`wwe_viewship.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_viewship.ipynb)
 
 ```sql
-SELECT e.EventType, 
-       ROUND(AVG(m.CageMatchRating), 2) AS AvgRating,
-       COUNT(*) AS MatchCount
-FROM wwe_match_rating m
-JOIN wwe_events e ON m.Date = e.Date AND m.Promotion = e.Promotion
-WHERE m.CageMatchRating IS NOT NULL
-GROUP BY e.EventType
-ORDER BY AvgRating DESC;
+SELECT 
+    YEAR(m.Date) AS Year,
+    e.EventType,
+    SUM(m.CageMatchRatingVotes) AS TotalVotes
+FROM match_rating m
+JOIN events e ON e.Date = m.Date AND e.Promotion = m.Promotion
+GROUP BY Year, e.EventType
+ORDER BY Year ASC, TotalVotes DESC;
 ```
 
-### Q2 — Has match quality trended up or down over the years?
+---
 
-```sql
-SELECT strftime('%Y', Date) AS Year,
-       ROUND(AVG(CageMatchRating), 2) AS AvgRating,
-       COUNT(*) AS MatchCount
-FROM wwe_match_rating
-WHERE CageMatchRating IS NOT NULL
-GROUP BY Year
-ORDER BY Year;
-```
+### Q2 — What are the top 5 most voted events for each event type?
 
-### Q3 — Which superstars appear most in top-rated WrestleMania matches?
+📓 [`wwe_event_type.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_event_type.ipynb)
+
+---
+
+### Q3 — Who are the top 20 highest rated WrestleMania superstars (2015–2025)?
+
+📓 [`wwe_wrestlemania_sups.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_wrestlemania_sups.ipynb)
 
 ```sql
 SELECT s.SuperstarName,
-       strftime('%Y', m.Date) AS Year,
-       SUM(m.CageMatchRatingVotes) AS TotalVotes
+       ROUND(AVG(m.CageMatchRating), 2) AS AvgRating,
+       COUNT(*) AS MatchCount
 FROM superstars s
 JOIN wwe_match_rating m ON s.MatchIndex = m.Index
 JOIN wwe_events e ON e.Date = m.Date AND e.Promotion = m.Promotion
 WHERE e.Event = 'WWE WrestleMania'
-GROUP BY s.SuperstarName, Year
-ORDER BY TotalVotes DESC
+GROUP BY s.SuperstarName
+ORDER BY AvgRating DESC
 LIMIT 20;
 ```
+
+---
+
+### Q4 — How did John Cena's match ratings trend throughout his career (2015–2025)?
+
+📓 [`wwe_johncena.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_johncena.ipynb)
+
+---
+
+### Q5 — How did John Cena's performance vary across career eras?
+
+📓 [`johncena_timeline.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/johncena_timeline.ipynb)
 
 ---
 
@@ -183,9 +195,11 @@ LIMIT 20;
 
 Built in Python using `matplotlib` and `pandas`.
 
-- **Q1** — Horizontal bar chart comparing average CageMatch ratings by EventType
-- **Q2** — Line chart showing average match rating trend by year
-- **Q3** — Scatter plot of WrestleMania superstars by year and total votes, annotated with superstar names
+- **Q1** — Line chart showing Cagematch rating votes by event type per year ([`wwe_viewship.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_viewship.ipynb))
+- **Q2** — Horizontal bar chart of top 5 most voted events per event type ([`wwe_event_type.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_event_type.ipynb))
+- **Q3** — Horizontal bar chart of top 20 highest rated WrestleMania superstars ([`wwe_wrestlemania_sups.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_wrestlemania_sups.ipynb))
+- **Q4** — Line chart of John Cena's average match rating by year ([`wwe_johncena.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_johncena.ipynb))
+- **Q5** — Violin/box plot of John Cena's ratings by career era ([`johncena_timeline.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/johncena_timeline.ipynb))
 
 ---
 
