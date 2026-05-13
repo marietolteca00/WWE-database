@@ -1,7 +1,10 @@
 # WWE Events & Match Ratings Database (2015–2025)
 ### World Wrestling Entertainment (WWE) gathering datasets to make a database - Final Project for EDS 213
 
-A structured SQL database built from real WWE event and match rating data sourced from [Cagematch.net](https://www.cagematch.net) and the Wrestling Observer Newsletter (WON). This project demonstrates end-to-end data engineering and analytics skills — from schema design and data ingestion to SQL querying and Python visualization.
+### Author: Marie Tolteca, Student- Masters in Environmental Data Science
+### Date: May 12, 2026
+
+A structured SQL database built from real WWE event and match rating data sourced from [Cagematch.net](https://www.cagematch.net) and the Wrestling Observer Newsletter (WON). This project demonstrates end-to-end data engineering and analytics skills from schema design and data ingestion to SQL querying and Python visualization.
 
 ---
 
@@ -103,12 +106,12 @@ Cleaning was performed in R using the `tidyverse` package.
 
 **Steps taken:**
 
-- Dates were already in `YYYY-MM-DD` format and loaded as proper date types — no reformatting needed
+- Dates were already in `YYYY-MM-DD` format and loaded as proper date types, no reformatting needed
 - Numeric columns (`CageMatchRating`, `WONStarRating`, `CageMatchRatingVotes`) contained no text or mixed values
-- Missing ratings represented as `NA` (expected — not every match is rated by both sources)
+- Missing ratings represented as `NA` (expected: not every match is rated by both sources)
 - Trailing commas removed from opponent strings (e.g. `"Raquel Rodriguez, Stephanie Vaquer,"`)
 - Tag teams extracted by detecting `&` in opponent columns and pivoting to long format
-- 515 duplicate-looking rows in `wwe_events` are legitimate — WWE runs multiple house shows in different cities under the same event name on the same date
+- 515 duplicates looking rows in `wwe_events` are legitimate. WWE runs multiple house shows in different cities under the same event name on the same date
 
 **Known limitation:** 81 match dates in `wwe_match_rating` have no corresponding row in `wwe_events`. These matches are excluded from any query that joins both tables.
 
@@ -219,9 +222,9 @@ Built in Python using `matplotlib` and `pandas`.
 
 1. Download the CSVs from [Kaggle](https://www.kaggle.com/datasets/franchise403/wwe-events-and-match-ratings-20152025)
 2. Run the R cleaning script to generate cleaned tables
-3. Ingest CSVs into SQLite using the provided ingestion script
-4. Run SQL queries against the database
-5. Run the Python visualization scripts to generate plots
+3. Ingest CSVs into an SQL file using `wwe_database` script to create tables
+4. Run SQL queries against the database - `wwe_queries` was created to test queries and experiment
+5. Run the Python visualization scripts to generate plots - These are in the `notebook` folder, each script creates one visualization using an Cursor Execute (`cur.execute`) method.
 
 ---
 
