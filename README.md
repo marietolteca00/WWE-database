@@ -1,8 +1,10 @@
 # WWE Events & Match Ratings Database (2015–2025)
-### World Wrestling Entertainment (WWE) gathering datasets to make a database - Final Project for EDS 213
+---
+## World Wrestling Entertainment (WWE) gathering datasets to make a database - Final Project for EDS 213
 
-### Author: Marie Tolteca, Student- Masters in Environmental Data Science
-### Date: May 12, 2026
+#### Author: Marie Tolteca, Student- Masters in Environmental Data Science
+#### Date: May 13, 2026
+---
 
 A structured SQL database built from real WWE event and match rating data sourced from [Cagematch.net](https://www.cagematch.net) and the Wrestling Observer Newsletter (WON). This project demonstrates end-to-end data engineering and analytics skills from schema design and data ingestion to SQL querying and Python visualization.
 
