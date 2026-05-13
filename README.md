@@ -234,4 +234,3 @@ Built in Python using `matplotlib` and `pandas`.
 - **81 unmatched match dates** — some matches cannot be linked to an event and are excluded from joined queries.
 - **Superstar name inconsistencies** — name variations (e.g. "Rey Mysterio" vs "Rey Mysterio Jr.") could cause duplicate entries in the superstars table. A fuzzy matching or manual deduplication step would improve accuracy.
 - **WON ratings are sparse** — only 2,171 of 8,101 matches have a WON rating, limiting cross-rating comparisons.
-- **Future enhancement** — unpivot the tag teams table further to individual superstars to enable per-superstar career rating analysis across all match types.
