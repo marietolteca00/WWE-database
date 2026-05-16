@@ -101,7 +101,10 @@ The dataset covers **10 years of WWE programming** (2015–2025), including tele
 | SuperstarName | TEXT | |
 
 ---
+## Schema
+<img width="142" height="635" alt="Screenshot 2026-05-16 at 12 54 14 AM" src="https://github.com/user-attachments/assets/41113388-d70d-4a79-b30d-ce28ee1285d7" />
 
+---
 ## Data Cleaning
 
 Cleaning was performed in R using the `tidyverse` package.
