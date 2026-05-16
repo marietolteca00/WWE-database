@@ -6,7 +6,7 @@
 #### Date: May 13, 2026
 ---
 
-A structured SQL database built from real WWE event and match rating data sourced from [Cagematch.net](https://www.cagematch.net) and the Wrestling Observer Newsletter (WON). This project demonstrates end-to-end data engineering and analytics skills from schema design and data ingestion to SQL querying and Python visualization.
+A structured SQL database built from real WWE event and match rating data sourced from Cagematch.net and the Wrestling Observer Newsletter (WON). This project demonstrates end-to-end data engineering and analytics skills from schema design and data ingestion to SQL querying and Python visualization.
 
 ---
 
