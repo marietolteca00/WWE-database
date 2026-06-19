@@ -119,95 +119,42 @@ Cleaning was performed in R using the `tidyverse` package.
 - 515 duplicates looking rows in `wwe_events` are legitimate. WWE runs multiple house shows in different cities under the same event name on the same date
 
 **Known limitation:** 81 match dates in `wwe_match_rating` have no corresponding row in `wwe_events`. These matches are excluded from any query that joins both tables.
-
-### Tag Teams Table (R Code)
-
-```r
-library(dplyr)
-library(tidyr)
-library(stringr)
-
-tag_teams <- match_rating %>%
-  select(Index, Opponent.1, Opponent.2) %>%
-  pivot_longer(
-    cols = c(Opponent.1, Opponent.2),
-    names_to = "Side",
-    values_to = "Team"
-  ) %>%
-  mutate(Team = str_trim(str_replace_all(Team, ",\\s*$", ""))) %>%
-  filter(str_detect(Team, "&")) %>%
-  select(MatchIndex = Index, Team) %>%
-  mutate(OpponentID = row_number()) %>%
-  select(OpponentID, MatchIndex, Team)
-```
-
 ---
 
 ## Analysis Questions
 
 ### Q1 — How has fan engagement varied across WWE event types from 2015 to 2025?
+- Line chart showing Cagematch rating votes by event type per year
 
 📓 [`wwe_viewship.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_viewship.ipynb)
-
-```sql
-SELECT 
-    YEAR(m.Date) AS Year,
-    e.EventType,
-    SUM(m.CageMatchRatingVotes) AS TotalVotes
-FROM match_rating m
-JOIN events e ON e.Date = m.Date AND e.Promotion = m.Promotion
-GROUP BY Year, e.EventType
-ORDER BY Year ASC, TotalVotes DESC;
-```
 
 ---
 
 ### Q2 — What are the top 5 most voted events for each event type?
-
+- Visualizations: Horizontal bar chart of top 5 most voted events per event type
+  
 📓 [`wwe_event_type.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_event_type.ipynb)
 
 ---
 
 ### Q3 — Who are the top 20 highest rated WrestleMania superstars (2015–2025)?
+- Visualizations: Horizontal bar chart of top 20 highest rated WrestleMania superstars
 
 📓 [`wwe_wrestlemania_sups.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_wrestlemania_sups.ipynb)
-
-```sql
-SELECT s.SuperstarName,
-       ROUND(AVG(m.CageMatchRating), 2) AS AvgRating,
-       COUNT(*) AS MatchCount
-FROM superstars s
-JOIN wwe_match_rating m ON s.MatchIndex = m.Index
-JOIN wwe_events e ON e.Date = m.Date AND e.Promotion = m.Promotion
-WHERE e.Event = 'WWE WrestleMania'
-GROUP BY s.SuperstarName
-ORDER BY AvgRating DESC
-LIMIT 20;
-```
 
 ---
 
 ### Q4 — How did John Cena's match ratings trend throughout his career (2015–2025)?
+- Visualizations: Line chart of John Cena's average match rating by year
 
 📓 [`wwe_johncena.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_johncena.ipynb)
 
 ---
 
 ### Q5 — How did John Cena's performance vary across career eras?
-
+- Visualizations: Violin/box plot of John Cena's ratings by career era
+  
 📓 [`johncena_timeline.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/johncena_timeline.ipynb)
-
----
-
-## Visualizations
-
-Built in Python using `matplotlib` and `pandas`.
-
-- **Q1** — Line chart showing Cagematch rating votes by event type per year ([`wwe_viewship.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_viewship.ipynb))
-- **Q2** — Horizontal bar chart of top 5 most voted events per event type ([`wwe_event_type.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_event_type.ipynb))
-- **Q3** — Horizontal bar chart of top 20 highest rated WrestleMania superstars ([`wwe_wrestlemania_sups.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_wrestlemania_sups.ipynb))
-- **Q4** — Line chart of John Cena's average match rating by year ([`wwe_johncena.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/wwe_johncena.ipynb))
-- **Q5** — Violin/box plot of John Cena's ratings by career era ([`johncena_timeline.ipynb`](https://github.com/marietolteca00/WWE-database/tree/main/notebooks/johncena_timeline.ipynb))
 
 ---
 
